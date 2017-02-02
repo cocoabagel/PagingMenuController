@@ -35,4 +35,10 @@ extension PagingMenuViewController: PagingMenuControllerDelegate {
     
     func didMove(toMenuItem menuItemView: MenuItemView, fromMenuItem previousMenuItemView: MenuItemView) {
     }
+    
+    func didScrollStart() {
+    }
+    
+    func didScrollEnd() {
+    }
 }

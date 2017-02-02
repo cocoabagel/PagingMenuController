@@ -13,6 +13,8 @@ public protocol PagingMenuControllerDelegate: class {
     func didMove(toMenu menuController: UIViewController, fromMenu previousMenuController: UIViewController)
     func willMove(toMenuItem menuItemView: MenuItemView, fromMenuItem previousMenuItemView: MenuItemView)
     func didMove(toMenuItem menuItemView: MenuItemView, fromMenuItem previousMenuItemView: MenuItemView)
+    func didScrollStart()
+    func didScrollEnd()
 }
 
 public extension PagingMenuControllerDelegate {
@@ -20,6 +22,8 @@ public extension PagingMenuControllerDelegate {
     func didMove(toMenu menuController: UIViewController, fromMenu previousMenuController: UIViewController) {}
     func willMove(toMenuItem menuItemView: MenuItemView, fromMenuItem previousMenuItemView: MenuItemView) {}
     func didMove(toMenuItem menuItemView: MenuItemView, fromMenuItem previousMenuItemView: MenuItemView) {}
+    func didScrollStart() {}
+    func didScrollEnd() {}
 }
 
 internal let MinimumSupportedViewCount = 1
@@ -282,6 +286,8 @@ open class PagingMenuController: UIViewController, PagingValidator {
 
 extension PagingMenuController: UIScrollViewDelegate {
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        delegate?.didScrollEnd()
+        
         let nextPage: Int
         switch (scrollView, pagingViewController, menuView) {
         case let (scrollView, pagingViewController?, _) where scrollView.isEqual(pagingViewController.contentScrollView):
@@ -292,6 +298,10 @@ extension PagingMenuController: UIScrollViewDelegate {
         }
         
         move(toPage: nextPage)
+    }
+    
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        delegate?.didScrollStart()
     }
     
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
